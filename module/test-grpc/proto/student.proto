@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+// protoc --gogofast_out=plugins=grpc:. --proto_path=./ --proto_path=./vendor ./module/test-grpc/proto/student.proto
+package test.student.v1;
+
+service Student {
+  // 学生详情
+  rpc StudentInfo(StudentInfoReq) returns(StudentInfoResp);
+  // 学生列表
+  rpc StudentList(StudentListReq) returns(StudentListResp);
+}
+
+message StudentInfoReq {
+  int64 Id = 1 [(gogoproto.moretags) = 'form:"id"'];
+}
+
+message StudentInfoResp {
+  int64 Id = 1 [(gogoproto.jsontag) = 'id'];
+  string Name = 2 [(gogoproto.jsontag) = 'name'];
+  int64 age = 3 [(gogoproto.jsontag) = 'age'];
+}
+
+message StudentListReq {
+  int64 page = 1 [(gogoproto.moretags) = 'form:"page"'];
+  int64 pageSize = 2 [(gogoproto.moretags) = 'form:"pageSize'];
+}
+
+message StudentListResp {
+  repeated StudentEntity list = 1 [(gogoproto.jsontag) = 'list'];
+  int64 total = 2 [(gogoproto.jsontag) = 'total'];
+}
+
+message StudentEntity {
+  int64 Id = 1 [(gogoproto.jsontag) = 'id'];
+  string Name = 2 [(gogoproto.jsontag) = 'name'];
+  int64 Age = 3 [(gogoproto.jsontag) = 'age'];
+}
+
