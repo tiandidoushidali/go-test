@@ -1,12 +1,14 @@
 package main
 
 import (
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/grpc"
 	pro "go-test/module/test-grpc/proto"
 	"log"
 	"context"
 	"time"
 	_ "google.golang.org/grpc/balancer/grpclb"
+	_ "github.com/gogo/protobuf/gogoproto"
 )
 
 const (
@@ -56,7 +58,7 @@ func main(){
 
 	go func() {
 		for {
-			allStr.Send(&pro.StreamReqData{Data:"ssss"})
+			allStr.Send(&pro.StreamReqData{Data:"ssss", IllName: &wrappers.StringValue{Value: "aaa"}})
 			time.Sleep(time.Second)
 		}
 	}()

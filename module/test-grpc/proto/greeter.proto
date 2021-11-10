@@ -3,6 +3,8 @@ syntax = "proto3";//声明proto的版本 只能 是3，才支持 grpc
 //声明 包名
 package test.student.v1;
 
+import "github.com/gogo/protobuf/types/wrappers.proto";
+
 //声明grpc服务
 service Greeter {
   /*
@@ -17,6 +19,7 @@ service Greeter {
 //stream请求结构
 message StreamReqData {
   string data = 1;
+  gogoproto.protobuf.StringValue IllName = 2;
 }
 //stream返回结构
 message StreamResData {

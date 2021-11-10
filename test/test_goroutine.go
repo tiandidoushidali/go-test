@@ -7,9 +7,19 @@ import (
 	"time"
 )
 
+
+var name string
+type Student struct {
+	Name string
+}
+
 func main() {
-	test()
+	s := &Student{}
+	test3(s)
 	time.Sleep(5 * time.Second)
+	mem := runtime.MemProfileRecord{
+	}
+	fmt.Println("mem allocate bytes", mem.AllocBytes, mem.AllocObjects)
 	fmt.Println("--=======--", runtime.NumGoroutine())
 }
 
@@ -66,4 +76,12 @@ func test2(i int) {
 	})
 
 	errgroup.Wait()
+}
+func test3(s *Student) {
+	for n := 1000; n > 0; n -- {
+		go func() {
+			name = fmt.Sprintf("name:%d", n )
+			s.Name = name
+		}()
+	}
 }
