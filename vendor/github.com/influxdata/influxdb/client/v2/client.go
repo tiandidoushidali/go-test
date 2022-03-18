@@ -3,7 +3,6 @@ package client // import "github.com/influxdata/influxdb/client/v2"
 
 import (
 	"bytes"
-	"context"
 	"crypto/tls"
 	"encoding/json"
 	"errors"
@@ -11,7 +10,6 @@ import (
 	"io"
 	"io/ioutil"
 	"mime"
-	"net"
 	"net/http"
 	"net/url"
 	"path"
@@ -50,10 +48,6 @@ type HTTPConfig struct {
 
 	// Proxy configures the Proxy function on the HTTP client.
 	Proxy func(req *http.Request) (*url.URL, error)
-
-	// DialContext specifies the dial function for creating unencrypted TCP connections.
-	// If DialContext is nil then the transport dials using package net.
-	DialContext func(ctx context.Context, network, addr string) (net.Conn, error)
 }
 
 // BatchPointsConfig is the config data needed to create an instance of the BatchPoints struct.
@@ -80,16 +74,9 @@ type Client interface {
 	// Write takes a BatchPoints object and writes all Points to InfluxDB.
 	Write(bp BatchPoints) error
 
-	// WriteCtx takes a BatchPoints object and writes all Points to InfluxDB.
-	WriteCtx(ctx context.Context, bp BatchPoints) error
-
 	// Query makes an InfluxDB Query on the database. This will fail if using
 	// the UDP client.
 	Query(q Query) (*Response, error)
-
-	// QueryCtx makes an InfluxDB Query on the database. This will fail if using
-	// the UDP client.
-	QueryCtx(ctx context.Context, q Query) (*Response, error)
 
 	// QueryAsChunk makes an InfluxDB Query on the database. This will fail if using
 	// the UDP client.
@@ -99,15 +86,9 @@ type Client interface {
 	Close() error
 }
 
-// For added performance users may want to send pre-serialized points.
-type HTTPClient interface {
-	Client
-	WriteRawCtx(ctx context.Context, bp BatchPoints, reqBody io.Reader) error
-}
-
 // NewHTTPClient returns a new Client from the provided config.
 // Client is safe for concurrent use by multiple goroutines.
-func NewHTTPClient(conf HTTPConfig) (HTTPClient, error) {
+func NewHTTPClient(conf HTTPConfig) (Client, error) {
 	if conf.UserAgent == "" {
 		conf.UserAgent = "InfluxDBClient"
 	}
@@ -125,8 +106,7 @@ func NewHTTPClient(conf HTTPConfig) (HTTPClient, error) {
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: conf.InsecureSkipVerify,
 		},
-		Proxy:       conf.Proxy,
-		DialContext: conf.DialContext,
+		Proxy: conf.Proxy,
 	}
 	if conf.TLSConfig != nil {
 		tr.TLSClientConfig = conf.TLSConfig
@@ -386,10 +366,6 @@ func NewPointFrom(pt models.Point) *Point {
 }
 
 func (c *client) Write(bp BatchPoints) error {
-	return c.WriteCtx(context.Background(), bp)
-}
-
-func (c *client) WriteCtx(ctx context.Context, bp BatchPoints) error {
 	var b bytes.Buffer
 
 	for _, p := range bp.Points() {
@@ -404,15 +380,11 @@ func (c *client) WriteCtx(ctx context.Context, bp BatchPoints) error {
 			return err
 		}
 	}
-	return c.WriteRawCtx(ctx, bp, &b)
-}
 
-// WriteRawCtx uses reqBody instead of parsing bp.Points. Metadata still comes from bp.
-func (c *client) WriteRawCtx(ctx context.Context, bp BatchPoints, reqBody io.Reader) error {
 	u := c.url
 	u.Path = path.Join(u.Path, "write")
 
-	req, err := http.NewRequestWithContext(ctx, "POST", u.String(), reqBody)
+	req, err := http.NewRequest("POST", u.String(), &b)
 	if err != nil {
 		return err
 	}
@@ -458,9 +430,6 @@ type Query struct {
 	ChunkSize       int
 	Parameters      map[string]interface{}
 }
-
-// Params is a type alias to the query parameters.
-type Params map[string]interface{}
 
 // NewQuery returns a query object.
 // The database and precision arguments can be empty strings if they are not needed for the query.
@@ -533,12 +502,7 @@ type Result struct {
 
 // Query sends a command to the server and returns the Response.
 func (c *client) Query(q Query) (*Response, error) {
-	return c.QueryCtx(context.Background(), q)
-}
-
-// QueryCtx sends a command to the server and returns the Response.
-func (c *client) QueryCtx(ctx context.Context, q Query) (*Response, error) {
-	req, err := c.createDefaultRequest(ctx, q)
+	req, err := c.createDefaultRequest(q)
 	if err != nil {
 		return nil, err
 	}
@@ -608,7 +572,7 @@ func (c *client) QueryCtx(ctx context.Context, q Query) (*Response, error) {
 
 // QueryAsChunk sends a command to the server and returns the Response.
 func (c *client) QueryAsChunk(q Query) (*ChunkedResponse, error) {
-	req, err := c.createDefaultRequest(context.Background(), q)
+	req, err := c.createDefaultRequest(q)
 	if err != nil {
 		return nil, err
 	}
@@ -657,7 +621,7 @@ func checkResponse(resp *http.Response) error {
 	return nil
 }
 
-func (c *client) createDefaultRequest(ctx context.Context, q Query) (*http.Request, error) {
+func (c *client) createDefaultRequest(q Query) (*http.Request, error) {
 	u := c.url
 	u.Path = path.Join(u.Path, "query")
 
@@ -669,10 +633,6 @@ func (c *client) createDefaultRequest(ctx context.Context, q Query) (*http.Reque
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		return nil, err
-	}
-
-	if ctx != nil {
-		req = req.WithContext(ctx)
 	}
 
 	req.Header.Set("Content-Type", "")

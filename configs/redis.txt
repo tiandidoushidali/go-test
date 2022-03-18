@@ -1,0 +1,12 @@
+# 集群
+[RedisChatConfig]
+    name = "med-xim"
+    proto = "tcp"
+    addr = "redis-cluster-qa.medlinker.tech:6379"
+    auth = "crpZXryQZOOfRKlM#"
+    idle = 10
+    active = 10
+    dialTimeout = "10s"
+    readTimeout = "10s"
+    writeTimeout = "10s"
+    idleTimeout = "10s"

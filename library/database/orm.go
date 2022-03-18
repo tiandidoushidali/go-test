@@ -34,7 +34,8 @@ func (l ormLog) Print(v ...interface{}) {
 			}
 		}
 	}
-	log.Info("%v", gorm.LogFormatter(v...))
+	fmt.Println("=========", v[0], v[1], v[2])
+	log.Info("%d, %v", len(v), gorm.LogFormatter(v...))
 }
 
 func init() {

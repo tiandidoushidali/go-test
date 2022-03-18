@@ -1,7 +1,6 @@
 package client
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"net"
@@ -61,10 +60,6 @@ type udpclient struct {
 }
 
 func (uc *udpclient) Write(bp BatchPoints) error {
-	return uc.WriteCtx(context.Background(), bp)
-}
-
-func (uc *udpclient) WriteCtx(ctx context.Context, bp BatchPoints) error {
 	var b = make([]byte, 0, uc.payloadSize) // initial buffer size, it will grow as needed
 	var d, _ = time.ParseDuration("1" + bp.Precision())
 
@@ -109,15 +104,11 @@ func (uc *udpclient) WriteCtx(ctx context.Context, bp BatchPoints) error {
 }
 
 func (uc *udpclient) Query(q Query) (*Response, error) {
-	return nil, fmt.Errorf("querying via UDP is not supported")
-}
-
-func (uc *udpclient) QueryCtx(ctx context.Context, q Query) (*Response, error) {
-	return nil, fmt.Errorf("querying via UDP is not supported")
+	return nil, fmt.Errorf("Querying via UDP is not supported")
 }
 
 func (uc *udpclient) QueryAsChunk(q Query) (*ChunkedResponse, error) {
-	return nil, fmt.Errorf("querying via UDP is not supported")
+	return nil, fmt.Errorf("Querying via UDP is not supported")
 }
 
 func (uc *udpclient) Ping(timeout time.Duration) (time.Duration, string, error) {
