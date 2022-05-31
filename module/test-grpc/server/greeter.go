@@ -1,86 +1,58 @@
-
-
 package main
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
-	"google.golang.org/grpc"
 	pro "go-test/module/test-grpc/proto"
-	"log"
+	"go-test/third/protobuf/google/gogo/protobuf/types"
+	"google.golang.org/grpc"
 	"net"
-	"sync"
-	"time"
 )
 
-const PORT  = ":50051"
+const PORT = ":50051"
 
 type server struct {
 }
 
-//服务端 单向流
-func (s *server)GetStream(req *pro.StreamReqData, res pro.Greeter_GetStreamServer) error{
-	i:= 0
-	for{
-		i++
-		res.Send(&pro.StreamResData{Data:fmt.Sprintf("%v",time.Now().Unix())})
-		time.Sleep(1*time.Second)
-		if i >10 {
-			break
-		}
+func (this *server) GetGreeterInfo(ctx context.Context, req *pro.GetGreeterInfoReq) (resp *pro.GetGreeterInfoResp, err error) {
+	//mp := map[string]interface{}{
+	//	"a": 1,
+	//	"b": "b",
+	//}
+	mp2 := map[string]interface{}{
+		"a": 2,
+		"c": "c",
 	}
-	return nil
-}
-
-//客户端 单向流
-func (this *server) PutStream(cliStr pro.Greeter_PutStreamServer) error {
-
-	for {
-		if tem, err := cliStr.Recv(); err == nil {
-			log.Println(tem)
-		} else {
-			log.Println("break, err :", err)
-			break
-		}
+	//b, _ := json.Marshal(mp)
+	b2, _ := json.Marshal(mp2)
+	et := pro.GetGreeterInfoEntity{
+		Name: "张三",
 	}
+	var b3 []byte
+	b3, _ = et.Marshal()
+	fmt.Println("======", string(b3))
+	resp = &pro.GetGreeterInfoResp{Data: []*types.Any{{
+		TypeUrl: "type.googleapis.com/test.student.v1.GetGreeterInfoEntity",
+		Value:   []byte(b3),
+	}, {
+		TypeUrl: "type.googleapis.com/google.protobuf.StringValue",
+		Value:   []byte(b2),
+	}}}
 
-	return nil
+	return
 }
 
-//客户端服务端 双向流
-func(this *server) AllStream(allStr pro.Greeter_AllStreamServer) error {
-
-	wg := sync.WaitGroup{}
-	wg.Add(2)
-	go func() {
-		for {
-			data, _ := allStr.Recv()
-			log.Println(data)
-		}
-		wg.Done()
-	}()
-
-	go func() {
-		for {
-			allStr.Send(&pro.StreamResData{Data:"ssss"})
-			time.Sleep(time.Second)
-		}
-		wg.Done()
-	}()
-
-	wg.Wait()
-	return nil
-}
-
-func main(){
+func main() {
 	//监听端口
-	lis,err := net.Listen("tcp",PORT)
-	if err != nil{
+	lis, err := net.Listen("tcp", PORT)
+	if err != nil {
 		return
 	}
 	//创建一个grpc 服务器
 	s := grpc.NewServer()
 	//注册事件
-	pro.RegisterGreeterServer(s,&server{})
+	pro.RegisterGreeterServer(s, &server{})
 	//处理链接
 	s.Serve(lis)
 }

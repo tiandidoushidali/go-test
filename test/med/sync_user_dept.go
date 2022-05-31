@@ -20,7 +20,7 @@ var deptBaseMap map[int64]string // <deptId, deptCode>
 var dbDeptMap map[int64]*Dept
 var oneDeptMap map[int64]string
 
-var accessToken string = "f163d106e37b3320be4f681a6619a7d4"
+var accessToken string = "c01797aaa8ba398e8159090a9080549b"
 
 /**
 ::::::::::warn:::::::::
@@ -35,23 +35,22 @@ var initDeptId int64 = 0
 var initDeptCode string = ""
 var initLevel int64 = 1
 
-
 type Dept struct {
-	DeptId   int64  `json:"dept_id" gorm:"column:dept_id"`
-	Name     string `json:"name" gorm:"column:name"`
-	ParentId int64  `json:"parent_id" gorm:"column:parent_id"`
-	Level int64 `json:"level" gorm:"column:level"`
-	DeptCode string `json:"dept_code" gorm:"column:dept_code"`
+	DeptId     int64  `json:"dept_id" gorm:"column:dept_id"`
+	Name       string `json:"name" gorm:"column:name"`
+	ParentId   int64  `json:"parent_id" gorm:"column:parent_id"`
+	Level      int64  `json:"level" gorm:"column:level"`
+	DeptCode   string `json:"dept_code" gorm:"column:dept_code"`
 	ParentCode string `json:"parent_dept_code" gorm:"column:parent_dept_code"`
 }
 
 type CUser struct {
-	UserId string `json:"user_id"`
-	Name string `json:"name"`
-	DeptId int64 `json:"dept_id"`
+	UserId   string `json:"user_id"`
+	Name     string `json:"name"`
+	DeptId   int64  `json:"dept_id"`
 	DeptCode string `json:"dept_code"`
-	IsLeader int64 `json:"is_leader"`
-	Email string `json:"email"`
+	IsLeader int64  `json:"is_leader"`
+	Email    string `json:"email"`
 }
 
 var dingdingDeptList []*Dept
@@ -115,7 +114,7 @@ func main() {
 	// 生成用户sql
 	genUserSql()
 
-	fmt.Println("------spend time------", time.Now().Unix() - start)
+	fmt.Println("------spend time------", time.Now().Unix()-start)
 }
 
 func genDeptSql() {
@@ -131,7 +130,7 @@ func genDeptSql() {
 	deptWriter := bufio.NewWriter(deptFile)
 	deptInsert := "INSERT INTO `med_calendar`.`dept`(`dept_id`, `name`, `dept_code`, `level`, `parent_id`, `parent_dept_code`, `state`) VALUES "
 	deptInsert = fmt.Sprintf("%s%s", deptInsert, strings.Join(deptSql, "\n"))
-	deptWriter.WriteString(fmt.Sprintf("%s%s", "delete from dept where id > 1;", "\n")) // 删除除默认数据外的所有部门
+	deptWriter.WriteString(fmt.Sprintf("%s%s", "delete from dept where id > 1 and not (dept_id >= 200000001 and dept_id < 300000000);", "\n")) // 删除除默认数据外的所有部门
 	deptWriter.WriteString(fmt.Sprintf("%s%s", deptInsert[:len(deptInsert)-1], ";"))
 	deptWriter.Flush()
 	deptFile.Close()
@@ -200,12 +199,12 @@ func getDingDingDept(deptId int64, level int64, deptCode string) {
 	}
 	for idx, item := range res.Result {
 		deptItem := &Dept{
-			DeptId:   item.DeptId,
-			Name:     item.Name,
-			ParentId: item.ParentId,
-			Level: level + 1,
+			DeptId:     item.DeptId,
+			Name:       item.Name,
+			ParentId:   item.ParentId,
+			Level:      level + 1,
 			ParentCode: deptCode,
-			DeptCode: fmt.Sprintf("%s-%s", deptCode, fmt.Sprintf("%03X", idx + 1)),
+			DeptCode:   fmt.Sprintf("%s-%s", deptCode, fmt.Sprintf("%03X", idx+1)),
 		}
 		if oneDeptCode, ok := oneDeptMap[item.DeptId]; ok {
 			deptItem.DeptCode = oneDeptCode
@@ -229,7 +228,7 @@ func getUserFromDept(dept *Dept) {
 		Leader bool   `json:"leader"`
 		UserId string `json:"userid"`
 		Name   string `json:"name"`
-		Email   string `json:"email"`
+		Email  string `json:"email"`
 	}
 	type Result struct {
 		HasMore    bool    `json:"has_more"`

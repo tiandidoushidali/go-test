@@ -3,8 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"git.medlinker.com/golang/xerror"
+	"github.com/go-kratos/kratos/pkg/ecode"
 	_ "github.com/gogo/protobuf/gogoproto"
 	_ "github.com/gogo/protobuf/proto"
+	"github.com/pkg/errors"
 	test_student_v1 "go-test/module/test-grpc/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -147,13 +150,24 @@ func (s *Server) StudentInfo(ctx context.Context, in *test_student_v1.StudentInf
 		time.Sleep(5 * time.Second)
 		fmt.Println("进入等待2", in.Id)
 	}
-	return ss, nil
+
+	//st := status.New(codes.Code(1000), "错误了1111")
+
+	e := xerror.WrapWithCode(errors.New("111111"), 1000000)
+	xe := e.(*xerror.Error)
+	xe.WithFields(1000, "错误了1111")
+	fmt.Println("----===--", ecode.Code(1000).Code())
+
+	return ss, status.New(codes.Code(1000), "错误了1111").Err()
+	return ss, status.Errorf(codes.Code(1000), "错误了1111")
 	//return &test_student_v1.StudentInfoResp{
 	//	Id:                   in.Id,
 	//	Name:                 "abcdefg",
 	//	Age:                  s.t,
 	//}, nil
 }
+
+
 
 func (s *Server) StudentList(ctx context.Context, in *test_student_v1.StudentListReq) (resp *test_student_v1.StudentListResp, err error) {
 	return &test_student_v1.StudentListResp{
@@ -169,8 +183,15 @@ func main() {
 		fmt.Printf("监听端口失败：%+v", err)
 		return
 	}
+
+	// 使用拦截器
+	var serverIntercept grpc.UnaryServerInterceptor
+	serverIntercept = func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+		fmt.Println("in serverIntercept")
+		return handler(ctx, req)
+	}
 	// 创建gRPC服务器
-	s := grpc.NewServer()
+	s := grpc.NewServer(grpc.UnaryInterceptor(serverIntercept))
 	// 注册服务
 	test_student_v1.RegisterStudentServer(s, &Server{
 		t:        time.Now().Unix(),

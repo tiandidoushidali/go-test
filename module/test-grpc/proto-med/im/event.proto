@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option go_package = "xim";
+
+package med.xim;
+
+// 用户注册事件
+message SendMsgEvent {
+    // 消息内容(message的序列化base64格式)
+    string content        = 1;
+}
+
+// 敏感词注册事件
+message SensitiveWordMsgEvent {
+    // 消息内容(message的序列化base64格式)
+    string content        = 1;
+}
+
+// 消息已读事件
+message MsgReadEvent {
+    uint32 user_id=1;
+    string map_id=2;
+    uint64 msg_id=3;
+    int64 time=4;
+    string ext=5;
+}
+
+message ImGroupEvent {
+    int32 type            = 1; // 1:加群 2:退群
+    int32 group_id        = 2; // 群id
+    uint32 user_id        = 3; // 用户id
+    uint32 business_type  = 4; // 群类型
+    uint32 business_id    = 5; // 群业务id
+    string ext            = 6; // 扩展字段
+}

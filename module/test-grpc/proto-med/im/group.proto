@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+option go_package = "xim";
+
+package med.xim;
+
+import "med-common/app/service/med-xim/api/im/entity/group.proto";
+import "med-common/app/service/med-xim/api/im/entity/message.proto";
+
+service Group {
+    // 创建或者关联一个群
+    rpc CreateOrRelate (CreateOrRelateRequest) returns (CreateOrRelateResponse) {}
+    // 批量获取群信息
+    rpc InfoBatch (InfoBatchRequest) returns (InfoBatchResponse) {}
+    // 加群或创建群组
+    rpc JoinOrCreate (JoinOrCreateRequest) returns (JoinOrCreateResponse) {}
+    // 获取群组历史消息
+    rpc History (HistoryRequest) returns (HistoryResponse) {}
+    // 退群
+    rpc Quit (QuitRequest) returns (QuitResponse) {}
+}
+
+// 创建或者关联一个群请求
+message CreateOrRelateRequest {
+    repeated uint32 userId = 1; // 群用户ID数组
+    string    groupName    = 2; // 群名称
+    uint32    groupId      = 3; // 群组ID 
+    uint32    businessType = 4; // 业务类型
+    uint32    businessId   = 5; // 具体业务ID
+    string    avatar       = 6; // 群组头像
+}
+
+// 创建或者关联一个群结果
+message CreateOrRelateResponse {
+    uint32 groupId = 1;
+}
+
+// 批量获取群信息请求
+message InfoBatchRequest {
+    uint32          uid     = 1; // 查看用户ID
+    repeated uint32 groupId = 2; // 群组ID 
+}
+
+// 批量获取群信息结果
+message InfoBatchResponse {
+    repeated entity.Group info  = 1; // 群列表信息
+}
+
+// 加群或创建群组请求
+message JoinOrCreateRequest {
+    uint32 groupId      = 1; // 群组ID 
+    uint32 userId       = 2; // 用户ID
+    string groupName    = 3; // 群组名称
+    uint32 businessType = 4; // 业务类型
+    uint32 businessId   = 5; // 具体业务ID
+    string avatar       = 6; // 群组头像
+}
+
+// 加群或创建群组结果
+message JoinOrCreateResponse {
+    uint32       groupId = 1; // 群组ID
+}
+
+// 历史消息请求
+message HistoryRequest {
+    uint32 groupId = 1; // 群组ID
+    uint32 start   = 2; // (可选)开始索引
+    int32  limit   = 3; // (可选)分页数量
+    bool   sort    = 4; // (可选)排序方式（false:升序 true:降序)
+    uint32 minId   = 5; // (可选)ID基准值，有的话 会只取比此id大的值。
+}
+
+// 历史消息结果
+message HistoryResponse {
+    int32                   next  = 1; // 下一次开始的索引位置
+    bool                    more  = 2; // 是否还有消息可以继续读取
+    repeated entity.Message list  = 3; // 消息列表
+}
+
+// 退群请求
+message QuitRequest {
+    uint32 groupId      = 1; // 群组ID
+    uint32 userId       = 2; // 用户ID
+    uint32 businessType = 3; // 业务类型
+    uint32 businessId   = 4; // 具体业务ID
+}
+
+// 退群结果
+message QuitResponse {
+
+}
+
+
+

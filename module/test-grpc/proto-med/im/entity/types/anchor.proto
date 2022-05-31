@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+message Anchor {
+    string href = 1;    // 链接
+    int32 start = 2;    // 需要做超链接文本起始下标
+    int32   len = 3;    // 超链接文本字符(非字节)长度
+    // 链接位置，居左传1，居中传2，居右传3，不传默认是0
+    int32 style = 4;
+    // 区分不同端，key代表不同端标识；如doctor-app、doctor-h5、panel、patient-h5等
+    // 详见 https://wiki.medlinker.com/pages/viewpage.action?pageId=54669120
+    map<string, AnchorTag> anchorTag = 5;
+    // 链接颜色
+    string color = 6;
+    // 扩展字段
+    string ext = 7;
+}
+
+message AnchorTag {
+    // 不同端的跳转链接
+    string tagHref = 1;
+    // 不同端是否展示此链接文本
+    bool tagIsShow = 2;
+    // 链接颜色
+    string color = 3;
+    // 扩展字段
+    string ext = 4;
+}

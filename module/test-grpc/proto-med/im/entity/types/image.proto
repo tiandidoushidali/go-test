@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+// 图片消息
+message Image {
+    string url = 1; // 图片url
+    int32 size = 2; // 图片大小
+    string preview=3; //预览图base64,格式为jpg
+
+}
+

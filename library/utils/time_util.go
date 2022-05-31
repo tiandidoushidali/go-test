@@ -8,6 +8,7 @@ import (
 const (
 	FORMAT_DAY = "2006-01-02"
 	FORMAT_YMDHIS = "2006-01-02 15:04:05"
+	FORMAT_DAY_HIS = "2006-01-02 15:04:05"
 )
 func GetCurrentMondayDate(tim  int64) time.Time {
 	var t time.Time

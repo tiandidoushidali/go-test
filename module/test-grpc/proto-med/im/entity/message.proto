@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option go_package   = "xim";
+
+package med.xim.entity;
+
+// 旧版IM数据结构
+import "med-common/app/service/med-xim/api/im/entity/misc/user.proto";
+import "med-common/app/service/med-xim/api/im/entity/misc/group.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/text.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/voice.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/video.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/location.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/card.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/business_card.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/business_notify.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/json.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/image.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/notice.proto";
+import "med-common/app/service/med-xim/api/im/entity/commands/login.proto";
+import "med-common/app/service/med-xim/api/im/entity/commands/withdraw.proto";
+import "med-common/app/service/med-xim/api/im/entity/commands/group_operation.proto";
+import "med-common/app/service/med-xim/api/im/entity/commands/friend_operation.proto";
+
+// 参考：https://git.medlinker.com/medlinker/im-business-proto
+message Message {
+    uint64 id    = 1;  // id 可以经过算法得到毫秒级时间戳: (id >> 22) + 1288834974657
+    string idStr = 20; // js 可以安全处理的最大值是2<<53。https://github.com/dcodeIO/long.js/issues/19。所以再存一个string 类型的专门给web端用
+    med.xim.entity.misc.User from = 2; // 消息发送者
+    oneof to {
+        med.xim.entity.misc.User  user  = 3; // 接收者
+        med.xim.entity.misc.Group group = 4; // 接收群
+    }
+    oneof data {
+        med.xim.entity.types.Text               text            = 5;
+        med.xim.entity.types.Voice              voice           = 6;
+        med.xim.entity.types.Card               card            = 7;
+        med.xim.entity.types.Image              image           = 8;
+        med.xim.entity.types.Location           location        = 9;
+        med.xim.entity.types.Notice             notice          = 10;
+        med.xim.entity.types.BusinessCard       businessCard    = 11;
+        med.xim.entity.types.Json               json            = 12;
+        med.xim.entity.types.BusinessNotify     notify          = 13;
+
+        med.xim.entity.commands.Login           login           = 15;
+        med.xim.entity.commands.Withdraw        withdraw        = 16;
+        med.xim.entity.commands.GroupOperation  groupOperation  = 17;
+        med.xim.entity.commands.FriendOperation friendOperation = 18;
+        med.xim.entity.types.Video              video           = 21;
+    }
+    string ext = 19; // 扩展字段。推荐使用json格式。沟通好 使用方式。
+    map<string, bool> isShow = 22; // 不同端消息是否显示
+    
+}
+

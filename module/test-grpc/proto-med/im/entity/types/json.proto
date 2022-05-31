@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+message Json {
+    string content = 1;
+    int32 type =2;
+}

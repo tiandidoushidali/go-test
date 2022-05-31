@@ -1,27 +1,27 @@
 syntax = "proto3";//声明proto的版本 只能 是3，才支持 grpc
 
+// protoc --proto_path=/usr/local/works/go/src/ --proto_path=./vendor --gogofast_out=plugins=grpc:. /usr/local/works/go/src/go-test/module/test-grpc/proto/greeter.proto
+// protoc -I=/usr/local/works/go/src/ -I=/usr/local/works/go/src/go-test/module/test-grpc/proto --gogofast_out=plugins=grpc:. greeter.proto
+
 //声明 包名
 package test.student.v1;
 
-import "github.com/gogo/protobuf/types/wrappers.proto";
+import "go-test/third/protobuf/google/protobuf/any.proto";
 
 //声明grpc服务
 service Greeter {
-  /*
-  以下 分别是 服务端 推送流， 客户端 推送流 ，双向流。
-  */
-  rpc GetStream (StreamReqData) returns (stream StreamResData){}
-  rpc PutStream (stream StreamReqData) returns (StreamResData){}
-  rpc AllStream (stream StreamReqData) returns (stream StreamResData){}
+
+  rpc GetGreeterInfo(GetGreeterInfoReq) returns (GetGreeterInfoResp);
 }
 
+message GetGreeterInfoReq {
 
-//stream请求结构
-message StreamReqData {
-  string data = 1;
-  gogoproto.protobuf.StringValue IllName = 2;
 }
-//stream返回结构
-message StreamResData {
-  string data = 1;
+
+message GetGreeterInfoResp {
+  repeated google.protobuf.Any data  = 1;
+}
+
+message GetGreeterInfoEntity {
+  string name = 1;
 }

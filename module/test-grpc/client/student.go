@@ -7,9 +7,11 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/resolver"
+	"google.golang.org/grpc/status"
 	"runtime"
 	"time"
-	
+
+	_ "go-test/module/test-grpc/balancer"
 	_ "go-test/module/test-grpc/resolver"
 )
 
@@ -69,7 +71,7 @@ func main() {
 	//	AppSecret: "test_secret",
 	//}
 	//conn, err := grpc.DialContext(ctx, STUDENT_ADDRESS, grpc.WithInsecure(), grpc.WithPerRPCCredentials(auth))
-	conn, err := grpc.DialContext(ctx, "grpcc://default/service", grpc.WithInsecure(), grpc.WithAuthority("test_id"))
+	conn, err := grpc.DialContext(ctx, "grpcc://default/service", grpc.WithInsecure(), grpc.WithAuthority("test_id"), grpc.WithBalancerName("gbalancer"))
 	if err != nil {
 		fmt.Println("-------err-----", err)
 		return
@@ -87,12 +89,16 @@ func main() {
 		Id: 2,
 	}
 
+
 	resp, err := c.StudentInfo(ctx, reqstreamData)
 	if err != nil {
-		fmt.Printf("获取数据失败：%s", err)
+		fmt.Println("----errr1----", err)
+		errStatus := status.Convert(err)
+		fmt.Println("----details----", errStatus.Proto().Details)
+		fmt.Printf("获取数据失败：%v, %s", errStatus.Code(), errStatus.Message())
 		return
 	}
-	fmt.Println(fmt.Sprintf("接受response：%+v %p", resp, &resp))
+	fmt.Println(fmt.Sprintf("接受response resp：%+v", resp))
 
 	return
 	go func(reqstreamData *pro.StudentInfoReq) {

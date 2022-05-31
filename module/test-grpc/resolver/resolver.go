@@ -35,7 +35,7 @@ type GrpcResolver struct {
 
 func (r *GrpcResolver) ResolveNow(opts resolver.ResolveNowOption) {
 	fmt.Println("----进入resolver-----", r.target)
-	r.cc.NewAddress([]resolver.Address{{Addr: "127.0.0.1:10002"}, {Addr: "127.0.0.1:10003"}})
+	r.cc.NewAddress([]resolver.Address{{Addr: "127.0.0.1:10002"}, {Addr: "172.16.68.79:10002"}})
 }
 
 func (r *GrpcResolver) Close() {

@@ -14,3 +14,4 @@ type PatientArchivesAssay struct {
 		TreatmentPlan []string `json:"treatmentPlan" bson:"treatmentPlan"`
 	}
 }
+

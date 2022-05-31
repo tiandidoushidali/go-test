@@ -1,0 +1,11 @@
+﻿syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+// 业务内容的通知
+message BusinessNotify {
+    int32  type = 1;        // 通知类型 1.有新的喜欢 2.有新的评论 3.天使谷任务已完成 4. 宝箱可领取 5. 成就可领取 （1000 全部小组消息更新，1001 近期更新视频 1002 小组内容更新 1003 新的小组 1004 新的直播上线）
+}

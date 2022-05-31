@@ -22,8 +22,10 @@ func NewMongodbClient() (client *mongo.Client, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 20 * time.Second)
 	defer cancel()
 
-	client, err = mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+	//client, err = mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
 	//client, err = mongo.Connect(ctx, options.Client().ApplyURI("mongodb://meddev:1UF0tcZ2V9eEzxCb@47.98.48.43:27017/admin"))
+	//client, err = mongo.Connect(ctx, options.Client().ApplyURI("mongodb://medv3:hahhaloiwewe11@10.80.179.145:47027,10.80.179.145:47027"))
+	client, err = mongo.Connect(ctx, options.Client().ApplyURI("mongodb://imuser:dP9sYjtgmnbvhdp6k@dds-bp17d2991f9f02a41703.mongodb.rds.aliyuncs.com:3717"))
 	if err != nil {
 		log.Errorf("[library|database|mongodb] NewMongodbClient mongo.Connect error:%+v", err)
 

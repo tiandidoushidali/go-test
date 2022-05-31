@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package   = "xim";
+
+package med.xim.entity;
+
+import "med-common/app/service/med-xim/api/im/entity/user.proto";
+
+// 群组信息数据结构
+message Group {
+    uint32          id            = 1;  // 群记录ID
+    string          name          = 2;  // 群聊名称
+    uint32          owner         = 3;  // 管理员UserId(managerUserId)
+    uint32          businessType  = 4;  // 业务类型
+    uint32          businessId    = 5;  // 业务ID
+    int32           isPublic      = 6;  // 是否公开群(1: 否, 2:是)
+    int32           isForbidden   = 7;  // 是否被屏蔽(1: 否, 2:是)
+    uint32          insertTime    = 8;  // 创建时间戳(ctime)
+    repeated string avatarList    = 9;  // 群头像
+    string          content       = 10; // 群介绍
+    int32           number        = 11; // 群聊成员数
+    string          broadcast     = 12; // 群公告
+    string          qrCodeUrl     = 13; // 二维码地址
+    string          shareH5Url    = 14; // 分享H5地址
+    int32           joinStatus    = 15; // 加入状态
+    bool            isNewOrigin   = 16; 
+    entity.User     ownerUser     = 17; // 群主信息
+}
+

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+// 语音消息
+message Voice {
+    string url = 1;     // 音频url
+    int32 duration = 2; // 音频长度(秒)
+}
+

@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+option go_package = "xim";
+
+package med.xim;
+
+import "med-common/app/service/med-xim/api/im/entity/message.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/text.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/card.proto";
+import "med-common/app/service/med-xim/api/im/entity/types/business_notify.proto";
+
+
+service Message {
+    // 发消息
+    rpc Handle (HandleRequest) returns (HandleResponse) {}
+    // 发送系统消息
+    rpc SendSystem (SendSystemRequest) returns (SendSystemResponse) {}
+    // 删除指定用户的会话入口(不会删除群组的其他用户会话入口)
+    rpc DelChat (DelChatRequest) returns (DelChatResponse) {}
+    // 添加白名单
+    rpc AddToWhiteList (AddToWhiteListRequest) returns (AddToWhiteListResponse) {}
+}
+
+message HandleRequest {
+    entity.Message data = 1;
+    bool      fromProxy = 2;
+}
+
+message HandleResponse {
+    int64        msgId = 1; // 消息ID
+    string       info  = 2; // 错误信息
+}
+
+message SendSystemRequest {
+    repeated uint32 userIds  = 1;
+    string          type     = 2;
+    uint32          senderId = 3;
+    oneof cols {
+        med.xim.entity.types.Text           text   = 4;
+        med.xim.entity.types.Card           card   = 5;
+        med.xim.entity.types.BusinessNotify notify = 6;
+    } 
+}
+
+message SendSystemResponse {
+
+}
+
+
+message DelChatRequest {
+    uint32 userId = 1; // 用户ID
+    string mapId  = 2; // 会话mapId
+}
+
+message DelChatResponse {
+
+}
+
+
+message AddToWhiteListRequest {
+    repeated uint32 userIdList = 1; // 用户ID数组
+}
+
+message AddToWhiteListResponse {
+
+}

@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option go_package = "xim";
+
+package med.xim;
+
+
+service User {
+    // 检查用户是否在线
+    rpc CheckOnLine (CheckOnLineRequest) returns (CheckOnLineResponse) {}
+    // 批量检查用户是否在线
+    rpc CheckOnLineBatch (CheckOnLineBatchRequest) returns (CheckOnLineBatchResponse) {}
+}
+
+message CheckOnLineRequest {
+    uint32 userId    = 1; // 用户ID
+    uint32 reference = 2; // 用户类型
+}
+
+message CheckOnLineResponse {
+    bool isOnline = 1; // 是否在线
+}
+
+message CheckOnLineBatchRequest {
+    repeated uint32 userIdList = 1; // 用户ID数组
+             uint32 reference  = 2; // 用户类型
+}
+
+message CheckOnLineBatchResponse {
+    repeated OnLineStatus list  = 1; // 用户在线情况列表
+}
+
+message OnLineStatus {
+    uint32 userId   = 1; // 用户ID
+    bool   isOnline = 2; // 是否在线
+}

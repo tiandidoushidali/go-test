@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option go_package   = "xim";
+
+package med.xim.entity;
+
+// 群组用户信息数据结构
+message User {
+    uint32 userId       = 1;
+    string name         = 2;
+    int32  sex          = 3;
+    string avatar       = 4;
+    int32  type         = 5;  // 用户类型 
+    string hospital     = 6;
+    uint32 hospitalId   = 7;
+    int32  sectionId    = 8;
+    string sectionName  = 9; 
+    int32  titleId      = 10; // 职称ID
+    string titleName    = 11; // 职称名称
+    int32  isSurgeon    = 12; // 是否外科医生
+    string userPlatform = 13;
+    string jumpUrl      = 14;
+}
+

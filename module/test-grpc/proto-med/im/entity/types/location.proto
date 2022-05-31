@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+// 位置消息
+message Location {
+    double longitude = 1;   // 经度
+    double latitude = 2;    // 纬度
+}
+

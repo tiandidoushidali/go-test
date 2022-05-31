@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package med.xim.entity.commands;
+
+option java_package = "med.xim.entity.commands";
+option go_package   = "xim";
+
+message FriendOperation {
+    int32  operation = 1;  // 操作类型 0-添加 1-同意 2-拒绝 3-拉黑 9=忽略
+    int64  opposite  = 2;  // 对方id(仅支持医生/机构，所以无需type)
+    string content   = 3;  // 请求附属消息
+    int32  reference = 4;  // 来源 0=通讯录 1=通过手机号搜索 2=通过群 3=通过二维码 4=通过名片 5=通过主页
+}

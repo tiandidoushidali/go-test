@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package med.xim.entity.commands;
+
+option java_package = "med.xim.entity.commands";
+option go_package   = "xim";
+
+import "med-common/app/service/med-xim/api/im/entity/misc/user.proto";
+
+message GroupOperation {
+    int32 operation = 1;    // 操作 0=创建群 1=邀请 2=退群(踢人) 3=加群申请 4=同意加群 5=忽略
+    int64     group = 2;    // group id
+    repeated med.xim.entity.misc.User members = 3;
+    string    content = 4;  // 请求附属消息
+}

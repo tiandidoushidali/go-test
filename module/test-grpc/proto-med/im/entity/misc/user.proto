@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package med.xim.entity.misc;
+
+option go_package   = "xim";
+
+message User {
+    int64 id = 1;   // 为系统用户时: 0=系统消息 1=业务处理 2=新的朋友 3=医生助手
+    int32 reference = 2; // 目前用户类型: 0=医联用户, 1=经纪人用户 9=系统用户
+    string name = 3;
+    string avatar = 4;
+    int32 type = 5; // 医联用户角色(仅reference=0时有效): 1=医生用户 2=机构用户 3=手机注册用户 4=游客(仅redis) 5=微信 6=QQ 11=营销平台患者 33=第三方账号
+    string hospital = 6; //用户所在医院
+    string title = 7; // 职称
+    string section = 8; // 科室
+}

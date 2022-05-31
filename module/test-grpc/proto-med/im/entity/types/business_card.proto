@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+import "med-common/app/service/med-xim/api/im/entity/misc/user.proto";
+
+// 名片
+message BusinessCard {
+    med.xim.entity.misc.User user =1 ;//用户
+}

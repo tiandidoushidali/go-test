@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+message Card {
+    int32  type = 1;        // 卡片类型 由native约定
+    string label = 2;       // 标签
+    string title = 3;       // 标题
+    string subtitle = 4;    // 副标题
+    string summary = 5;     // 摘要
+    string image = 6;       // 图片
+    string url = 7;         // 链接
+    int32  display = 8;     // 显示位置 0:系统消息会话; 1:toast only; 2:会话+toast
+    string extra = 9;       // card 特定type的额外信息
+}

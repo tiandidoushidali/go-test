@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package med.xim.entity.commands;
+
+option java_package = "med.xim.entity.commands";
+option go_package   = "xim";
+
+// 消息撤回 [会话中]
+message Withdraw {
+    int64 id = 1;       // 底层消息id
+    string idStr = 2;   // 底层消息id 给h5
+}

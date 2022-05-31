@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+// 视频消息cd ..
+message Video {
+    string url     = 1; // 视频url
+    int32 duration = 2; // 视频url(秒)
+    string cover   = 3; // 封面url
+    string title   = 4; // 标题
+    uint32  id     = 5; // 视频id
+    int32 width    = 6; // 宽
+    int32 height   = 7; // 高
+}

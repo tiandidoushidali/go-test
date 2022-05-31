@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+import "med-common/app/service/med-xim/api/im/entity/types/anchor.proto";
+import "med-common/app/service/med-xim/api/im/entity/misc/user.proto";
+
+
+// 文本消息
+message Text {
+    string content = 1; // 文本内容
+    repeated med.xim.entity.types.Anchor anchors = 2; // 5.1新增需求，文本中特么要夹带链接
+    repeated med.xim.entity.misc.User atUsers = 3; // 5.2圈某人
+}

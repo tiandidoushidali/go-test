@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package med.xim.entity.misc;
+
+option go_package = "xim";
+
+message Group {
+    int64 id = 1;
+    string name = 3;
+    repeated string avatar = 4; // 很多个用户的头像
+    int32  amount = 5;          // 群人数
+    int64  owner= 6;            // 群主，只能为医联主库用户
+    int32 businessType=7;       //  群业务类型  0：普通群 1：问诊
+    int64 businessId=8;         //  群业务id   如businessType！=0.则businessId 为具体业务业务id
+    string avatarUrl = 9; //用户设置的头像
+    int32  isPublic = 10;     // 是否公开群
+    int32  isForbidden = 11;     // 是否被屏蔽
+    int32 isWechat = 12; // 是否关联微信
+}
+

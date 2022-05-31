@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package med.xim.entity.types;
+
+
+option go_package   = "xim";
+
+import "med-common/app/service/med-xim/api/im/entity/types/anchor.proto";
+
+
+// 灰条 [显示在会话中：你已经添加了xx可以开始聊天了、不要相信汇款、xx退出了群...]
+message Notice {
+    string content = 1;
+    repeated med.xim.entity.types.Anchor anchors = 2; // 通知带链接
+}
