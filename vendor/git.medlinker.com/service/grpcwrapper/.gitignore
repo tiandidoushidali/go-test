@@ -1,0 +1,25 @@
+# vim
+*.swo
+*.swp
+.DS_Store
+.buildpath
+.hgignore.swp
+.project
+.orig
+.swp
+*.swp
+*.swo
+.idea/
+.settings/
+.vscode/
+vender/
+composer.lock
+gitpush.sh
+pkg/
+bin/
+cbuild
+*/.DS_Store
+config/config.toml
+main
+.vscode
+go.sum

@@ -5,14 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"git.medlinker.com/service/common/ecode"
+	"git.medlinker.com/service/grpcwrapper"
 	"go-test/library/code"
 	med_wallet_go "go-test/module/test-grpc/proto-med/wallet"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"reflect"
-	"git.medlinker.com/service/grpcwrapper"
 )
 type User struct {
 	// 用户ID：med_primary.user.id
@@ -63,16 +62,17 @@ func main() {
 
 	////通过grpc 库 建立一个连接
 	//conn, err := grpc.Dial("172.25.5.67:8000", grpc.WithInsecure())
-	grpcwrapper
-	conn, err := grpc.DialContext(context.Background(), "127.0.0.1:7001", grpc.WithInsecure(), grpc.WithUnaryInterceptor(func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 
-		err := invoker(ctx, method, req, reply, cc, opts...)
-		if s, ok := err.(*ecode.Status); ok {
-			fmt.Println("------client recv----", s.Code(), s.Message())
-		}
-		fmt.Println("---client----", reflect.TypeOf(err))
-		return err
-	}))
+	//conn, err := grpc.DialContext(context.Background(), "127.0.0.1:7001", grpc.WithInsecure(), grpc.WithUnaryInterceptor(func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+	//
+	//	err := invoker(ctx, method, req, reply, cc, opts...)
+	//	if s, ok := err.(*ecode.Status); ok {
+	//		fmt.Println("------client recv----", s.Code(), s.Message())
+	//	}
+	//	fmt.Println("---client----", reflect.TypeOf(err))
+	//	return err
+	//}))
+	conn, err := grpcwrapper.NewClient("127.0.0.1:7001")
 
 	ctx := context.Background()
 	u := &User{
@@ -97,6 +97,9 @@ func main() {
 		RealName:             "彭航娅",
 	})
 	if err != nil {
+		if eee, ok := err.(*ecode.Status); ok {
+			fmt.Println("--eeee----", eee.Code(), eee.Message(), eee.Details())
+		}
 		fmt.Println("----err---", reflect.TypeOf(err))
 		s := status.Convert(err)
 		fmt.Println("---s---", s.Code(), s.Message(), s.Details())

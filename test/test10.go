@@ -11,6 +11,7 @@ type TTTT struct {
 	sync.Mutex
 }
 
+
 func (t *TTTT) setId(id int64) {
 	fmt.Println("------in-----", time.Now())
 	t.Lock()

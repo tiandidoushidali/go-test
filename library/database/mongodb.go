@@ -93,6 +93,11 @@ func (m *Mongodb) SortOption(val interface{}) *Mongodb {
 	return m
 }
 
+func (m *Mongodb) HitOption(hit interface{}) *Mongodb {
+	m.options.Hint = hit
+	return m
+}
+
 func (m *Mongodb) InsertOne(ctx context.Context, document interface{}) (resp *mongo.InsertOneResult, err error){
 	resp, err = m.Client.Database(m.database).Collection(m.collection).InsertOne(ctx, document)
 	if err != nil {
@@ -191,4 +196,24 @@ func (m *Mongodb) GetIndexes(ctx context.Context) {
 	for _, v := range results {
 		log.Infof("[library|database|mongodb] GetIndexes results range:k->v", v)
 	}
+}
+
+type conn struct {
+	addr string
+}
+
+type Collection struct {
+	db   *conn
+	orgC *mongo.Collection
+}
+
+
+// 获取im msg_new connection
+func (m *Mongodb) GetImMsgNewConnection() *Collection {
+	//orgC := m.Database("im").Collection("msg_new")
+	//return &Collection{
+	//	orgC: orgC,
+	//	db:   c.conn,
+	//}
+	return  nil
 }

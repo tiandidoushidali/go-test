@@ -1,8 +1,11 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/shopspring/decimal"
+	"time"
 )
 
 type CallResultWrapper struct {
@@ -41,7 +44,77 @@ func (en *ElectCodeOrderInfoResp_Entity) String() string {
 	return "测试的了"
 }
 
+var c = make(chan int)
+
+func watch(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			fmt.Println("时间到")
+			<-c
+		default:
+			fmt.Println("default")
+			time.Sleep(1 * time.Second)
+		}
+	}
+}
+
 func main() {
+	js := `{
+ "actualPayable": 98.12,
+ "amountPayable": 100,
+ "code": "1234",
+ "compatRecord": "7800000001",
+ "orderNumber": "165465300992",
+ "patCardId": "411502198612088781",
+ "patMobile": "15868175923",
+ "patName": "⻩俊辉",
+ "patSex": "⼥",
+ "strActualPayable": "98.00",
+ "strAmountPayable": "100.00"
+ }`
+	type WindowOrderConfirmResp struct {
+		ActualPayable decimal.Decimal `json:"actualPayable"` // 实际⽀付⾦额
+		AmountPayable decimal.Decimal `json:"amountPayable"` // 总共⽀付⾦额
+		Code string `json:"code"` // 4位缴费码
+		CompatRecord string `json:"compatRecord"` // 就诊卡号或医保卡号
+		OrderNumber string `json:"orderNumber"` // 订单号
+		PatCardId string `json:"patCardId"` // 身份证号
+		StrActualPayable string `json:"strActualPayable"` // 转换实际⽀付⾦额
+		StrAmountPayable string `json:"strAmountPayable"` // 转换总共⽀付⾦额
+		PatSex string `json:"patSex"` // 性别
+		PatName string `json:"patName"` // patName
+		PatMobile string `json:"patMobile"` // ⼿机号
+	}
+	var wo WindowOrderConfirmResp
+
+	er1 := json.Unmarshal([]byte(js), &wo)
+	if er1 != nil {
+		fmt.Println("---err----", er1)
+	}
+	up := make(map[string]interface{})
+	json.Unmarshal([]byte(js), &up)
+	fmt.Println("----", up)
+	fmt.Println(1 << 20)
+	return
+	fundDe, _ := decimal.NewFromString("1.036")
+	v := fundDe.Mul(decimal.NewFromInt(100)).BigInt().Int64()
+	fmt.Println("---v-----", v)
+	return
+	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(ctx, 3 * time.Second)
+	defer cancel()
+
+	go watch(ctx)
+	go watch(ctx)
+
+	c <- 1
+	fmt.Println("---")
+
+
+
+	return
+	var err error
 	j := `{
 	"code": "0",
 	"list": [{
@@ -59,7 +132,7 @@ func main() {
 	wrapper := new(CallResultWrapper)
 	callResult := new(CallResult)
 	wrapper.CallResult = callResult
-	err := json.Unmarshal([]byte(j), &wrapper)
+	err = json.Unmarshal([]byte(j), &wrapper)
 	if err != nil {
 		fmt.Println("err:", err)
 	}

@@ -14,9 +14,10 @@ type Student struct {
 }
 
 func main() {
-	s := &Student{}
-	test3(s)
-	time.Sleep(5 * time.Second)
+	//s := &Student{}
+	//test3(s)
+	test4()
+	time.Sleep(15 * time.Second)
 	mem := runtime.MemProfileRecord{
 	}
 	fmt.Println("mem allocate bytes", mem.AllocBytes, mem.AllocObjects)
@@ -84,4 +85,21 @@ func test3(s *Student) {
 			s.Name = name
 		}()
 	}
+}
+
+func test4() {
+	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+				fmt.Println("exec result panic")
+			}
+		}()
+		for i := 0; i < 10; i ++ {
+			fmt.Println("current i :", i)
+			time.Sleep(1 * time.Second)
+			if i == 8 {
+				panic("end 8")
+			}
+		}
+	}()
 }

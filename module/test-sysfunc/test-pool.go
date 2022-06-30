@@ -17,7 +17,13 @@ var bytePool = sync.Pool{
 		return &b
 	},
 }
+
+
+var commonPool = sync.Pool{New: func() interface{} {
+	return "1"
+}}
 func main() {
+	fmt.Println("----", commonPool.Get())
 	t := fmt.Sprintf("%s 23:59:59", time.Now().Format("2006-01-02"))
 	ts, _ := time.ParseInLocation("2006-01-02 15:04:05", t, time.Local)
 	fmt.Println("---", ts, time.Now())

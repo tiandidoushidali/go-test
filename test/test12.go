@@ -20,7 +20,7 @@ import (
 	"time"
 )
 
-//go:generate mockery -name=CC
+////go:generate mockery -name=CC
 type CC interface {
 	Get(key string) (data interface{}, err error)
 }
