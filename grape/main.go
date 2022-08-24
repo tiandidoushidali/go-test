@@ -13,31 +13,8 @@ import (
 
 func main() {
 	fmt.Println("path base :", path.Base("/aa/bb/cc/"))
-	_ = `
-CICAgJi07s
-OpFRJVCNHB
-pSUQACJMaH
-R0cDovL2F2
-YXRhci1maW
-xlLnFhLm1l
-ZGxpbmtlci
-5jb20vOTdm
-YTk2ZjMtZT
-k0MC0xMWVi
-LWFkN2UtYW
-VlYWUxOWRm
-ZDMxLmpwZy
-IFCNHGwwEq
-BQoD5pG4og
-ETMTUzNjU4
-ODg4NTU4Mz
-IwMDI1Ng`
-data := "CICAgJi07sOpFRJVCNHBpSUQACJMaHR0cDovL2F2YXRhci1maWxlLnFhLm1lZGxpbmtlci5jb20vOTdmYTk2ZjMtZTk0MC0xMWViLWFkN2UtYWVlYWUxOWRmZDMxLmpwZyIFCNHGwwEqBQoD5pG4ogETMTUzNjU4ODg4NTU4MzIwMDI1Ng"
-data = "CICAgOqd2tGyFRJZCK7oriUaDeWMu+WKqS3popzojaMiQ2h0dHBzOi8vcHViLW1lZC1hdmF0YXIubWVkbGlua2VyLmNvbS9hc3Npc3RhbnQvZG9jdG9yLWFzc2lzdGFudC5wbmcaBAgBEAl6LwgAEAEaJDM3ZGJlOGMzLTZiNGMtNDQ0YS1iOWFhLTBhODk4NDc0ZjBmOSoDNC4zogETMTU0MTcxNjMxNDYxNDEzNjgzMg=="
-//"CICAgJi07sOpFRJVCNHBpSUQACJMaHR0cDovL2F2YXRhci1maWxlLnFhLm1lZGxpbmtlci5jb20vOTdmYTk2ZjMtZTk0MC0xMWViLWFkN2UtYWVlYWUxOWRmZDMxLmpwZyIFCNHGwwEqBQoD5pG4ogETMTUzNjU4ODg4NTU4MzIwMDI1"
-//"CICAgJi07sOpFRJVCNHBpSUQACJMaHR0cDovL2F2YXRhci1maWxlLnFhLm1lZGxpbmtlci5jb20vOTdmYTk2ZjMtZTk0MC0xMWViLWFkN2UtYWVlYWUxOWRmZDMxLmpwZyIFCNHGwwEqBQoD5pG4ogETMTUzNjU4ODg4NTU4MzIwMDI1Ng"
-fmt.Println("--data--", len(data))
-
+data := "CICAgJid07sOpFRJVCNHBpSUQACJMaHR0cDovL2F2YXRhci1maWxlLnFhLm1lZGxpbmtlci5jb20vOTdmYTk2ZjMtZTk0MC0xMWViLWFkN2UtYWVlYWUxOWRmZDMxLmpwZyIFCNHGwwEqBQoD5pG4ogETMTUzNjU4ODg4NTU4MzIwMDI1Ng"
+data = "CL+ZgMaYz5DUFRJJCOmr2kYaCeaigeaZqOaZqCI1aHR0cHM6Ly9wdWItbWVkLWF2YXRhci5pbWdzLm1lZGxpbmtlci5uZXQvbWFsZW5ldy5wbmcoISKbAgjy4tMGGgnmooHmmajmmagiNWh0dHBzOi8vcHViLW1lZC1hdmF0YXIuaW1ncy5tZWRsaW5rZXIubmV0L21hbGVuZXcucG5nIklodHRwczovL3B1Yi1tZWQtYXZhdGFyLm1lZGxpbmtlci5jb20vNDY5OTdmYzMtNGIzMi00MzliLWIyOTAtYjhlMGE3MmYwNDljIkNodHRwczovL3B1Yi1tZWQtYXZhdGFyLm1lZGxpbmtlci5jb20vYXNzaXN0YW50L2RvY3Rvci1hc3Npc3RhbnQucG5nKAMwxaj7FzgEQKGNBko1aHR0cHM6Ly9wdWItbWVkLWF2YXRhci5pbWdzLm1lZGxpbmtlci5uZXQvbWFsZW5ldy5wbmeiARMxNTYwNTcwMzYwNjM2NjQwNDQ3Kh0KG+mjjuWNjue7neS7o+S6n+W+heino+WGs+WQgw=="
 	decoded, err := base64.StdEncoding.DecodeString(data)
  	if err != nil {
  		fmt.Println("---err-----", err, len(data))
@@ -51,7 +28,6 @@ fmt.Println("--data--", len(data))
 	m, _ := json.Marshal(msg)
 	fmt.Println("msg:", string(m))
 
-	return
 	hd := hashids.NewData()
 	hd.Alphabet = hashids.DefaultAlphabet
 	hd.Salt = "<)Toyota~86(>"
@@ -59,6 +35,9 @@ fmt.Println("--data--", len(data))
 	ids, _ := hashids.NewWithData(hd).DecodeInt64WithError(tk)
 	fmt.Println("tk:", tk, ids)
 
+	idds, _ := hashids.NewWithData(hd).DecodeInt64WithError("JoJaoxf9")
+	fmt.Println("----idds----", idds)
+	return
 	hr := hashring.New([]string{"comet-0-1", "comet-0-2", "comet-1-1", "comet-1-2"})
 	hr.AddNode("comet-1-1")
 	hr.AddNode("comet-1-2")

@@ -5,20 +5,19 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/golang/protobuf/proto"
 	"go-test/grape/protocol/message"
 	"go-test/library/database"
 	"go-test/library/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"github.com/golang/protobuf/proto"
-	"strings"
+	"regexp"
+	"strconv"
 	"time"
 )
 
 // 获取历史消息
 func main() {
-	getMessageDate()
-	return
 	client, err := database.NewMongodbClient()
 	if err != nil {
 		fmt.Println("-----err-----", err)
@@ -32,7 +31,8 @@ func main() {
 	mongodb.DbList(ctx)
 	fmt.Println("----nowms----", nowms)
 
-	getHistoryMessage(ctx, mongodb, 8260672, 93940229, 1, 0, 100)
+	//getHistoryMessage(ctx, mongodb, 8260672, 93940229, 1, 0, 100)
+	getHistoryMessage(ctx, mongodb, 13917434, 0, 1, 0, 100)
 }
 
 // 获取群历史消息
@@ -81,15 +81,56 @@ func getHistoryMessage(ctx context.Context, mongodb *database.Mongodb, groupId i
 	}
 }
 
+//func getUserChatList(ctx context.Context, mongodb *database.Mongodb, userId int64, sort int64, start, limit int64) {
+//	chatRelKey := fmt.Sprintf("c:%d", userId)
+//	opt := new(options.FindOptions)
+//	//->orderBy('msgId', 'desc')
+//	sort := bson.D{{"msgId", -1}}
+//	// ->get(['msgId', 'mapId']);
+//	projection := bson.D{
+//		{"_id", 0},
+//		{"msgId", 1},
+//		{"mapId", 1},
+//	}
+//	// ->where('key', $chatRelKey)  ->limit(200)
+//	opt.SetProjection(projection).SetSort(sort).SetLimit(200)
+//	cur, err := mongodb.Database("im").Collection("msg_new").
+//		LimitOption(10).Find(ctx, )
+//	cursor, err := dao.GetChatListCollection(ctx).Find(ctx, bson.M{"key": chatRelKey}, opt)
+//	filter := bson.M{"mapId": fmt.Sprintf("h:%d",groupId)}
+//	cur, err := mongodb.Database("im").Collection("msg_new").
+//		//SortOption(bson.D{{"_id", -1}}).SkipOption(start).
+//		LimitOption(limit + 1).
+//		Find(ctx, filter)
+//	if err != nil {
+//		fmt.Println("getHistoryMessage err :", err)
+//		return
+//	}
+//}
+//
 func parseMessage(data string) {
-	if strings.Contains(data, "COOegLbNud6hFRKGAQixgJwfGgbnjovkuL0iRWh0dHBzOi8vcHViLW1lZC1hdmF0YXIubWVkbGlua2VyLmNvbS9jZWIzMTEwY") {
-		fmt.Println("----match-----", data)
-	}
 	decoded, _ := base64.StdEncoding.DecodeString(data)
 	msg := &message.Message{}
 	proto.Unmarshal(decoded, msg)
 
-	fmt.Println("--msg---", msg.Id)
+	typeMap := map[int32]string{
+		1: "医生用户",
+		2: "机构用户",
+		3: "手机注册用户",
+		4: "游客(仅redis)",
+		5: "微信",
+		6: "QQ",
+		11: "营销平台患者",
+		33: "第三方账号",
+	}
+	typeName := typeMap[msg.GetFrom().GetType()]
+
+	fmt.Printf("------msg:%s-------- \n", msg.GetIdStr())
+	fmt.Printf("userId:%d, name:%s, type:(%d, %s), reference:%d, id:%d group:%d date:%s content:%s data:%+v \n",
+		msg.From.Id, msg.GetFrom().GetName(), msg.GetFrom().GetType(), typeName,
+		msg.GetFrom().GetReference(), msg.GetId(), msg.GetGroup().Id, getMessageDate(int64(msg.GetId())), msg.GetText().GetContent(),
+		msg.GetData())
+
 	m, _ := json.Marshal(msg)
 	if msg.Id == 1532202218919300963 {
 		fmt.Println("----msg time----", utils.Parse(1532202218919300963), time.Unix(utils.Parse(1532202218919300963)/1000, 0).Format(utils.FORMAT_DAY_HIS))
@@ -97,11 +138,39 @@ func parseMessage(data string) {
 	}
 }
 
-func getMessageDate() string {
-	unix := utils.Parse(1351065226280816640)
-	fmt.Println("---unix----", (unix - unix % 1000) / 1000)
+func getMessageDate(id int64) string {
+	unix := utils.Parse(id)
+	//unixS := (unix - unix % 1000) / 1000
+	//fmt.Println("---unix----", unixS, time.Unix(unixS, 0).Format(utils.FORMAT_DAY_HIS))
 
-	ret := time.Unix((unix - unix % 1000) / 1000, unix - unix % 1000).Format(utils.FORMAT_DAY_HIS)
-	fmt.Println("---ret---", ret)
+	ret := time.Unix(unix / 1000, unix % 1000).Format(utils.FORMAT_DAY_HIS)
+	//fmt.Println("---ret---", ret)
 	return ret
+}
+
+//func getMessageDate(id int64) string {
+//	unix := utils.Parse(id)
+//	//unixS := (unix - unix % 1000) / 1000
+//	//fmt.Println("---unix----", unixS, time.Unix(unixS, 0).Format(utils.FORMAT_DAY_HIS))
+//
+//	ret := time.Unix((unix - unix % 1000) / 1000, unix - unix % 1000).Format(utils.FORMAT_DAY_HIS)
+//	//fmt.Println("---ret---", ret)
+//	return ret
+//}
+
+// 转换8进制utf-8字符串到中文
+// eg: `\346\200\241` -> 怡
+func convertOctonaryUtf8(in string) string {
+	s := []byte(in)
+	reg := regexp.MustCompile(`\\[0-7]{3}`)
+
+	fmt.Println("====", in, s)
+	out := reg.ReplaceAllFunc(s,
+		func(b []byte) []byte {
+
+			i, _ := strconv.ParseInt(string(b[1:]), 8, 0)
+			fmt.Println("--==--", s, b, i, string(b[1:]))
+			return []byte{byte(i)}
+		})
+	return string(out)
 }

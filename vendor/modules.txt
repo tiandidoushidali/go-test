@@ -22,6 +22,8 @@ github.com/DataDog/zstd
 # github.com/Shopify/sarama v1.23.1
 ## explicit
 github.com/Shopify/sarama
+# github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d
+github.com/StackExchange/wmi
 # github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 github.com/alecthomas/template
 github.com/alecthomas/template/parse
@@ -108,7 +110,11 @@ github.com/go-kratos/kratos/pkg/net/netutil/breaker
 github.com/go-kratos/kratos/pkg/net/trace
 github.com/go-kratos/kratos/pkg/net/trace/proto
 github.com/go-kratos/kratos/pkg/stat/metric
+github.com/go-kratos/kratos/pkg/stat/sys/cpu
 github.com/go-kratos/kratos/pkg/time
+# github.com/go-ole/go-ole v1.2.4
+github.com/go-ole/go-ole
+github.com/go-ole/go-ole/oleutil
 # github.com/go-playground/locales v0.13.0
 github.com/go-playground/locales
 github.com/go-playground/locales/currency
@@ -221,6 +227,21 @@ github.com/modern-go/reflect2
 github.com/opentracing/opentracing-go
 github.com/opentracing/opentracing-go/ext
 github.com/opentracing/opentracing-go/log
+# github.com/panjf2000/gnet/v2 v2.1.1
+## explicit
+github.com/panjf2000/gnet/v2
+github.com/panjf2000/gnet/v2/internal/io
+github.com/panjf2000/gnet/v2/internal/netpoll
+github.com/panjf2000/gnet/v2/internal/queue
+github.com/panjf2000/gnet/v2/internal/socket
+github.com/panjf2000/gnet/v2/internal/toolkit
+github.com/panjf2000/gnet/v2/pkg/buffer/elastic
+github.com/panjf2000/gnet/v2/pkg/buffer/linkedlist
+github.com/panjf2000/gnet/v2/pkg/buffer/ring
+github.com/panjf2000/gnet/v2/pkg/errors
+github.com/panjf2000/gnet/v2/pkg/logging
+github.com/panjf2000/gnet/v2/pkg/pool/byteslice
+github.com/panjf2000/gnet/v2/pkg/pool/ringbuffer
 # github.com/patrickmn/go-cache v2.1.0+incompatible
 ## explicit
 github.com/patrickmn/go-cache
@@ -253,6 +274,9 @@ github.com/satori/go.uuid
 # github.com/serialx/hashring v0.0.0-20160406013744-cba55573cd94
 ## explicit
 github.com/serialx/hashring
+# github.com/shirou/gopsutil v2.19.11+incompatible
+github.com/shirou/gopsutil/cpu
+github.com/shirou/gopsutil/internal/common
 # github.com/shopspring/decimal v1.3.1
 ## explicit
 github.com/shopspring/decimal
@@ -346,11 +370,12 @@ go.mongodb.org/mongo-driver/x/mongo/driver/session
 go.mongodb.org/mongo-driver/x/mongo/driver/topology
 go.mongodb.org/mongo-driver/x/mongo/driver/uuid
 go.mongodb.org/mongo-driver/x/mongo/driver/wiremessage
-# go.uber.org/atomic v1.7.0
+# go.uber.org/atomic v1.9.0
 go.uber.org/atomic
-# go.uber.org/multierr v1.6.0
+# go.uber.org/multierr v1.8.0
+## explicit
 go.uber.org/multierr
-# go.uber.org/zap v1.17.0
+# go.uber.org/zap v1.21.0
 ## explicit
 go.uber.org/zap
 go.uber.org/zap/buffer
@@ -379,7 +404,8 @@ golang.org/x/net/trace
 ## explicit
 golang.org/x/sync/errgroup
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e
+# golang.org/x/sys v0.0.0-20220803195053-6e608f9ce704
+## explicit
 golang.org/x/sys/cpu
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
@@ -495,6 +521,8 @@ gopkg.in/jcmturner/gokrb5.v7/types
 # gopkg.in/jcmturner/rpc.v1 v1.1.0
 gopkg.in/jcmturner/rpc.v1/mstypes
 gopkg.in/jcmturner/rpc.v1/ndr
+# gopkg.in/natefinch/lumberjack.v2 v2.0.0
+gopkg.in/natefinch/lumberjack.v2
 # gopkg.in/yaml.v2 v2.4.0
 gopkg.in/yaml.v2
 # github.com/satori/go.uuid => github.com/satori/go.uuid v1.2.0

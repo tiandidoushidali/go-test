@@ -90,6 +90,24 @@ func main() {
 		Id: 2,
 	}
 
+	reqstreamData2 := &pro.StudentList2Req{
+		Data: map[string]*pro.StudentEntitys{},
+	}
+	reqstreamData2.Data["zs"] = &pro.StudentEntitys{
+		Entitys:              make([]*pro.StudentEntity, 0),
+	}
+	reqstreamData2.Data["zs"].Entitys = append(reqstreamData2.Data["zs"].Entitys, &pro.StudentEntity{
+		Id:                   1,
+		Name:                 "zs1",
+		Age:                  1,
+	})
+	reqstreamData2.Data["zs"].Entitys = append(reqstreamData2.Data["zs"].Entitys, &pro.StudentEntity{
+		Id:                   2,
+		Name:                 "zs2",
+		Age:                  2,
+	})
+	c.StudentList2(ctx, reqstreamData2)
+	return
 
 	resp, err := c.StudentInfo(ctx, reqstreamData)
 	if err != nil {

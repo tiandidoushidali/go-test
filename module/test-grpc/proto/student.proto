@@ -9,6 +9,8 @@ service Student {
   rpc StudentInfo(StudentInfoReq) returns(StudentInfoResp);
   // 学生列表
   rpc StudentList(StudentListReq) returns(StudentListResp);
+  // 学生列表2
+  rpc StudentList2(StudentList2Req) returns(StudentListResp);
 }
 
 message StudentInfoReq {
@@ -31,9 +33,16 @@ message StudentListResp {
   int64 total = 2 [(gogoproto.jsontag) = 'total'];
 }
 
+message StudentList2Req {
+  map<string, StudentEntitys> data = 1 [(gogoproto.moretags) = 'data'];
+}
+
 message StudentEntity {
   int64 Id = 1 [(gogoproto.jsontag) = 'id'];
   string Name = 2 [(gogoproto.jsontag) = 'name'];
   int64 Age = 3 [(gogoproto.jsontag) = 'age'];
 }
 
+message StudentEntitys {
+  repeated StudentEntity entitys = 1 [(gogoproto.jsontag) = 'entitys'];
+}

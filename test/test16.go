@@ -75,7 +75,63 @@ func (conn *Connection) IoLoop() {
 	conn.WriteLoop()
 }
 
+type ty int64
+const (
+	DEVELOP ty = 1
+	PRE ty = 2
+	PRO ty = 3
+)
+func (ty ty) GetTy() string {
+	switch ty {
+	case 1: return "1"
+	default: return "a"
+	}
+}
+
+func (ty ty) GetId() int {
+	switch ty {
+	case 1: return 1
+	default: return 2
+	}
+}
+
+type Class1 struct {
+	name string
+	stu Student1
+}
+
+type Student1 struct {
+	id int
+}
+
+
+
 func main() {
+	cc := Class1{name:"1班", stu: Student1{id: 1}}
+	cc.name = "2班"
+	cc.stu.id = 2
+	fmt.Println("-------", cc)
+
+	return
+	//time.Sleep(5 * time.Second)
+	fmt.Println("----", cc)
+
+	return
+	var tt *Connection
+	fmt.Println(tt.queue)
+	return
+	var t ty = 1
+
+	var i int64 = 1
+	if t != ty(i) {
+		fmt.Println("ok")
+	} else {
+		fmt.Println("not ok")
+	}
+
+	fmt.Println(t.GetTy(), PRO.GetTy(), ty(4).GetId())
+	return
+
 	conn := &Connection{
 		queue: make(chan int64, 10),
 		stop:  make(chan bool, 1),

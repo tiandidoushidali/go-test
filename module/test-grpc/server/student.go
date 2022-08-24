@@ -168,13 +168,26 @@ func (s *Server) StudentInfo(ctx context.Context, in *test_student_v1.StudentInf
 }
 
 
-
 func (s *Server) StudentList(ctx context.Context, in *test_student_v1.StudentListReq) (resp *test_student_v1.StudentListResp, err error) {
 	return &test_student_v1.StudentListResp{
 		List:  make([]*test_student_v1.StudentEntity, 0),
 		Total: s.t,
 	}, nil
 }
+
+
+func (s *Server) StudentList2(ctx context.Context, in *test_student_v1.StudentList2Req) (resp *test_student_v1.StudentListResp, err error) {
+	for _, vs := range in.Data {
+		for k1, v1 := range vs.Entitys {
+			fmt.Println("----k1----", k1, "----v1----", v1)
+		}
+	}
+	return &test_student_v1.StudentListResp{
+		List:  make([]*test_student_v1.StudentEntity, 0),
+		Total: s.t,
+	}, nil
+}
+
 
 func main() {
 	// 监听本地端口

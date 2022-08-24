@@ -21,3 +21,59 @@ message StreamReqData {
 message StreamResData {
   string data = 1;
 }
+
+message OrderFilter {
+  // 用户id
+  string user_id = 1;
+  // 开始时间
+  string created_at = 2;
+  // 结束时间
+  string end_at = 3;
+  // 类型 1-奖励、2-提现
+  uint32 trans_type = 4;
+  // 交易单号
+  string pay_trans_id = 5;
+  // 活动id
+  string act_id = 6;
+  // 业务id
+  repeated string trans_id = 7;
+  // 姓名
+  string user_name = 8;
+  // 预算id
+  string budget_id = 9;
+  // 主键id
+  repeated uint32 id = 10;
+  // 状态
+  repeated uint32 status = 11;
+  // 核销人
+  string cancel_opt_name = 12;
+  // appId
+  string app_id = 13;
+  // 业务名字 like business%
+  string business_name = 14;
+  // 最大id值
+  int64 id_max = 15;
+  // 最小id值
+  int64 id_min = 16;
+  // 预算ids
+  repeated string budget_ids = 17;
+  // 预算ids (排除掉的)
+  repeated string no_budget_ids = 18;
+  // business_name（排除掉的）
+  repeated string no_business_names = 19;
+  // 多个排除条件
+  repeated NoCondition no_conditions = 20;
+  // 多个包含条件
+  repeated InCondition in_conditions = 21;
+  // 排除掉的
+  message NoCondition {
+    // 预算ids
+    repeated string budget_ids = 1;
+    // business_name
+    repeated string business_names = 2;
+  }
+  // 包含的
+  message InCondition {
+
+  }
+}

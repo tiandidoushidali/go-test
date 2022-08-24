@@ -30,6 +30,7 @@ require (
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/lithammer/shortuuid v2.0.3+incompatible
 	github.com/opentracing/opentracing-go v1.2.0
+	github.com/panjf2000/gnet/v2 v2.1.1 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/common v0.26.0
@@ -46,9 +47,11 @@ require (
 	github.com/tealeg/xlsx v1.0.5
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	go.mongodb.org/mongo-driver v1.4.4
-	go.uber.org/zap v1.17.0
+	go.uber.org/multierr v1.8.0 // indirect
+	go.uber.org/zap v1.21.0
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
+	golang.org/x/sys v0.0.0-20220803195053-6e608f9ce704 // indirect
 	google.golang.org/grpc v1.39.0
 	google.golang.org/protobuf v1.27.1
 )
